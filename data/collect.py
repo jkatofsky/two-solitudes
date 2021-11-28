@@ -12,18 +12,19 @@ reddit = praw.Reddit(
     user_agent="two-solitudes-project",
 )
 
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-for logger_name in ("praw", "prawcore"):
-    logger = logging.getLogger(logger_name)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(handler)
+# handler = logging.StreamHandler()
+# handler.setLevel(logging.DEBUG)
+# for logger_name in ("praw", "prawcore"):
+#     logger = logging.getLogger(logger_name)
+#     logger.setLevel(logging.DEBUG)
+#     logger.addHandler(handler)
 
 translate_client = translate.Client.from_service_account_json('creds.json')
 
 # BASE_URL = 'http://api.reddit.com'
 # USER_AGENT = {'User-agent': ''}
 
+# TODO: improve verbosity over the the API request logging
 def save_comments_to_file(subreddit, limit, post_sort, time_filter='all',
                     max_comments_per_post=50, filename=None, save_english_translation=False):
     if not filename:
@@ -51,15 +52,20 @@ def save_comments_to_file(subreddit, limit, post_sort, time_filter='all',
         #     break
 
     comments = []
-    for post in posts:
+    for num, post in enumerate(posts, start=1):
+        print(f'Collecting comments for post {num}...')
         post.comment_sort = 'top'
         post.comments.replace_more(limit=None)
+        collected = 0
         comment_queue = post.comments[:]
-        while comment_queue and len(comment_queue) < max_comments_per_post:
+        while comment_queue and collected < max_comments_per_post:
             comment = comment_queue.pop(0)
+            # TODO: why the heck are so many comment bodies empty
             if comment.body:
                 comments.append(comment.body)
+                collected += 1
             comment_queue.extend(comment.replies)
+        print(f'{len(comments)} total comments collected')
         # post_comments = requests.get(f'{BASE_URL}/r/{subreddit}/comments/{post_id}',
         #                             params={'limit': max_comments_per_post,
         #                                     'sort': comment_sort},
@@ -75,6 +81,7 @@ def save_comments_to_file(subreddit, limit, post_sort, time_filter='all',
     with open(filename, 'w') as fp:
         fp.write('\n'.join(comments))
 
+    # TODO: fix the error with the request payload size exceeds
     if save_english_translation:
         translated_comments = translate_client.translate(comments, target_language='en')
         with open(f'{filename}-EN', 'w') as fp:
@@ -82,5 +89,6 @@ def save_comments_to_file(subreddit, limit, post_sort, time_filter='all',
 
 # TODO: time permitting, give this script command line args
 if __name__ == "__main__":
-    save_comments_to_file('Quebec', 500, 'top', 'all', save_english_translation=True)
     save_comments_to_file('Canada', 500, 'top', 'all')
+    save_comments_to_file('onguardforthee', 500, 'top', 'all')
+    save_comments_to_file('canadapolitics', 500, 'top', 'all')
