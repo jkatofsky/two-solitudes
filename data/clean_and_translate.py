@@ -26,6 +26,13 @@ def clean_and_translate_file_contents(filename):
         with open(f'{fn}-CLEAN.{ext}', 'w') as fp2:
             fp2.write('\n'.join(translated))
 
+def make_merged_clean_file(directory):
+    with open(f'{directory}/merged-CLEAN.txt', 'w') as outfile:
+        for filename in [filename for filename in os.listdir(directory) if 'CLEAN' in filename]:
+            with open(f'{directory}/{filename}') as infile:
+                for line in infile:
+                    outfile.write(line)
+
 # TODO: setup with command line args
 if __name__ == '__main__':
     # clean_and_translate_file_contents(f'data/CA/canadapolitics-hot_posts-comments.txt')
@@ -34,14 +41,15 @@ if __name__ == '__main__':
     # clean_and_translate_file_contents(f'data/CA/onguardforthee-top_posts-comments.txt')
     # for filename in os.listdir('data/QC'):
     #     clean_and_translate_file_contents(f'data/QC/{filename}')
-    clean_and_translate_file_contents(f'data/QC/montreal-top_posts-comments.txt')
-    clean_and_translate_file_contents(f'data/QC/montreal-hot_posts-comments.txt')
-    clean_and_translate_file_contents(f'data/QC/Quebec-top_posts-comments.txt')
-    clean_and_translate_file_contents(f'data/QC/Quebec-hot_posts-comments.txt')
-    clean_and_translate_file_contents(f'data/QC/quebeccity-top_posts-comments.txt')
-    clean_and_translate_file_contents(f'data/QC/quebeccity-hot_posts-comments.txt')
-    clean_and_translate_file_contents(f'data/QC/quebeclibre-top_posts-comments.txt')
-    clean_and_translate_file_contents(f'data/QC/quebeclibre-hot_posts-comments.txt')
-
+    # clean_and_translate_file_contents(f'data/QC/montreal-top_posts-comments.txt')
+    # clean_and_translate_file_contents(f'data/QC/montreal-hot_posts-comments.txt')
+    # clean_and_translate_file_contents(f'data/QC/Quebec-top_posts-comments.txt')
+    # clean_and_translate_file_contents(f'data/QC/Quebec-hot_posts-comments.txt')
+    # clean_and_translate_file_contents(f'data/QC/quebeccity-top_posts-comments.txt')
+    # clean_and_translate_file_contents(f'data/QC/quebeccity-hot_posts-comments.txt')
+    # clean_and_translate_file_contents(f'data/QC/quebeclibre-top_posts-comments.txt')
+    # clean_and_translate_file_contents(f'data/QC/quebeclibre-hot_posts-comments.txt')
+    make_merged_clean_file('data/QC')
+    make_merged_clean_file('data/CA')
 
 
