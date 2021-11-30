@@ -17,7 +17,7 @@ def generate():
         data: dict = request.json
         model = data.get('model')
         if not model or model not in ['CA', 'QC']:
-            return {'error': 'Invalid model'}, 400
+            return {'error': 'invalid model'}, 400
         prompt = data.get('prompt', '')
         gen_model = QC_model if model == 'QC' else CA_model
         text = gen_model.generate(prompt=prompt, return_as_list=True)[0]

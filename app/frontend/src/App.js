@@ -30,12 +30,10 @@ function App() {
     const setter = model === 'QC' ? setQCText : setCAText;
     setter('Loading...');
     const data = { model: model, prompt: prompt };
-    console.log(data);
     const response = await generateAPICall(data);
     const responseData = await response.json();
     if (response.status !== 200) setter(responseData.error);
     else setter(responseData.text);
-    console.log(QCText, CAText);
   }
 
   return (
