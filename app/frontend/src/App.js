@@ -25,15 +25,16 @@ function App() {
   const [QCText, setQCText] = useState('');
   const [CAText, setCAText] = useState('');
   const [prompt, setPrompt] = useState('');
+  const [temperature, setTemperature] = useState(0.6);
 
   const generateText = async (model) => {
     const setter = model === 'QC' ? setQCText : setCAText;
     setter('Loading...');
-    const data = { model: model, prompt: prompt };
+    const data = { model, prompt, temperature };
     const response = await generateAPICall(data);
     const responseData = await response.json();
     if (response.status !== 200) setter(responseData.error);
-    else setter(responseData.text);
+    else setter(`"${responseData.text}"`);
   }
 
   return (
@@ -45,6 +46,12 @@ function App() {
         placeholder="Write an (optional) start of a sentence that the models will attempt to continue"
         onChange={(event) => setPrompt(event.target.value)}
       />
+      <p>
+        Temperature (between 0-1):
+        <input type="number" id="temperature" name="temperature"
+          min="0.1" max="1" defaultValue={temperature}
+          onChange={(event) => setTemperature(event.target.value)} />
+      </p>
       <h3>Quebec</h3>
       <button onClick={() => generateText('QC')}>Generate Text</button>
       <p>{QCText}</p>
@@ -53,7 +60,7 @@ function App() {
       <p>{CAText}</p>
       <hr />
       <h2>About</h2>
-      The Quebec and R.O.C. datasets are GPT-2 models fine-trained on about 100,000 reddit comments each.
+      The Quebec and R.O.C. datasets are GPT-2 models fine-tuned on about 100,000 reddit comments each.
     </div>
   );
 }

@@ -19,8 +19,9 @@ def generate():
         if not model or model not in ['CA', 'QC']:
             return {'error': 'invalid model'}, 400
         prompt = data.get('prompt', '')
+        temperature = float(data.get('temperature', 0.6))
         gen_model = QC_model if model == 'QC' else CA_model
-        text = gen_model.generate(prompt=prompt, return_as_list=True)[0]
+        text = gen_model.generate(prompt=prompt, return_as_list=True, temperature=temperature)[0]
         return {'text': text}
     except Exception as e:
         traceback.print_exc()
