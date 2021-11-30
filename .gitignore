@@ -2,5 +2,6 @@ secrets.py
 __pycache__
 creds.json
 node_modules
-/build
+build
+static
 .DS_Store
