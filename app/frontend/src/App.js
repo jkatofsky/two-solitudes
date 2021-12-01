@@ -60,7 +60,7 @@ function App() {
       <p>{CAText}</p>
       <hr />
       <h2>About</h2>
-      The Quebec and R.O.C. datasets are GPT-2 models fine-tuned on about 100,000 reddit comments each.
+      The models are GPT-2 instances fine-tuned on about 100,000 reddit comments each. All the code for that, as well as for this web app, can be found <a href="https://github.com/jkatofsky/two-solitudes" target='_blank' rel='noreferrer'>here</a>. The presentation associated with this project can be found <a href="https://mcgill-my.sharepoint.com/:p:/g/personal/joshua_katofsky_mail_mcgill_ca/EShwf6PLgWBHrpX2eB7fdkUBIC9g0bt4dcHhwnfZ3xaiCg?e=ZXgGHO" target='_blank' rel='noreferrer'>here</a>.
     </div>
   );
 }
